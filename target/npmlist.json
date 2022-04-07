@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "name": "@iozcelik/sarissablogastro",
+  "dependencies": {
+    "@astrojs/tailwind": { "version": "0.1.0" },
+    "daisyui": { "version": "2.13.6" },
+    "theme-change": { "version": "2.0.2" }
+  }
+}

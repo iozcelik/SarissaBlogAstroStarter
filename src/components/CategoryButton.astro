@@ -1,0 +1,16 @@
+---
+import Config from "../sarissa.config.cjs";
+import { getCategoryColour } from "../sarissaUtils";
+
+const { category } = Astro.props;
+const countVisibility = Config.categorySettings.countVisibility;
+---
+
+<a href={`../category/${category.name}/1`}>
+  <button
+    class={`btn gap-2 ${getCategoryColour(category.name)}`}
+  >
+    {category.name}
+    {countVisibility && <div class="badge badge-secondary">{category.count}</div>}
+  </button>
+</a>

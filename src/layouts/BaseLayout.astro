@@ -1,0 +1,45 @@
+---
+import Config from "../sarissa.config.cjs";
+import Head from "../components/Head.astro";
+import MobileNavbar from "../components/MobileNavbar.astro";
+import SiteImage from "../components/SiteImage.astro";
+import SocialMedia from "../components/SocialMedia.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Footer from "../components/Footer.astro";
+
+const { pageTitle } = Astro.props;
+
+---
+
+<html lang="en">
+  <Head pageTitle={pageTitle} />
+  <body>
+    <div class="drawer drawer-mobile">
+      <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex justify-center lg:justify-start">
+        <div class="lg:w-[60vw] max-w-screen-lg lg:pt-14 lg:p-4">
+          <MobileNavbar />
+          <div class="flex-1 p-3 md:py-[35]">
+            <div class="space-y-2 md:space-y-6">
+              <slot />
+            </div>
+            <Footer />
+          </div>
+        </div>
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer" class="drawer-overlay"></label>
+        <div class="overflow-y-auto flex lg:justify-end w-fit lg:w-[40vw]">
+          <div class="w-fit p-3 lg:m-6 bg-base-100">
+            {Config.siteImagePath && <SiteImage />}
+            <h1 class="text-2xl p-2 pl-4">{Config.siteTitle}</h1>
+            <p class="text-sm pl-4">{Config.siteDescription}</p>
+            <SocialMedia />
+            <div class="divider"></div>
+            <Sidebar />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

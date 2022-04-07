@@ -1,0 +1,50 @@
+---
+import PageLayout from "../../../layouts/PageLayout.astro";
+import PostPreview from "../../../components/PostPreviewRow.astro";
+import Pagination from "../../../components/Pagination.astro";
+import Config from "../../../sarissa.config.cjs";
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = await Astro.glob("../../post/*.md");
+  let allCategories = allPosts
+    .filter((f) => f.frontmatter.categories != undefined)
+    .map((p) => p.frontmatter.categories);
+  let allCategoriesUnique = [...new Set(allCategories.flat())];
+  return allCategoriesUnique.map((category) => {
+    const filteredPosts = allPosts.filter((post) =>
+      post.frontmatter.categories.includes(category)
+    );
+    return paginate(filteredPosts, {
+      params: { category },
+      pageSize: Config.pageSize,
+    });
+  });
+}
+
+const { page } = Astro.props;
+const { params } = Astro;
+let url = "category/"+params.category;
+
+const capitalize = ([firstLetter, ...restOfWord]) =>
+  firstLetter.toUpperCase() + restOfWord.join("");
+---
+
+<PageLayout pageTitle={capitalize(params.category)}>
+  <p class="text-right">{page.total} {Config.i18n.resultFound}</p>
+  <div class="overflow-x-auto w-full">
+    <table class="table-normal w-full">
+      <tbody>
+      <tr>
+  <td>
+        {page.data.map((post) => (  <PostPreview post={post} />))}
+          </td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+  <Pagination slot="paging" 
+    currentPage={page.currentPage}
+    totalPage={page.lastPage}
+    url={url}
+  />
+</PageLayout>

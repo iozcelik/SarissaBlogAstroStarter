@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostPreview from '../../components/PostPreviewCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import Config from "../../sarissa.config.cjs";
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await Astro.glob('../post/*.md');
+	const sortedPosts = allPosts.sort((a, b) => new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf());
+	return paginate(sortedPosts, { pageSize: Config.pageSize });
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout pageTitle={`${Config.menu?.archive ?? "Page"} ${page.currentPage}`}>
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-3xl font-extrabold">{`${Config.menu?.archive ?? "Page"} ${page.currentPage}`}</h1>
+    </div>
+  </div>
+{page.data.map((post) => (  <PostPreview post={post} />))}
+<Pagination currentPage={page.currentPage} totalPage={page.lastPage} url="posts" />
+</BaseLayout>

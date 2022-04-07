@@ -1,0 +1,15 @@
+---
+import Config from "../sarissa.config.cjs";
+
+const { pageTitle } = Astro.props;
+
+const title = pageTitle + " - " + Config.siteTitle;
+---
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>{title}</title>
+  {Config.favicon && <link rel="icon" type="image/x-icon" href={Config.favicon}>}
+  {Config.description && <meta name="description" content={Config.description}>}
+</head>

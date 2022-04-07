@@ -1,0 +1,30 @@
+---
+import Config from "../sarissa.config.cjs";
+import {capitalize,getCategoryColour} from "../sarissaUtils";
+
+const { category } = Astro.props;
+const countVisibility = Config.categorySettings.countVisibility;
+
+---
+
+<a href={`../category/${category.name}/1`}>
+  <div class="card w-80 h-40 bg-base-100 shadow-xl image-full">
+    {category.image &&
+        <figure>
+            <img src={category.image} alt={category.name} />
+        </figure>
+    }
+
+    <div class="card-body">
+        <h2 class="card-title justify-center">{capitalize(category.name)}
+            {countVisibility &&    
+                <div class="justify-center">
+                    <button class={`btn ${getCategoryColour(category.name)}`}>
+                        {category.count}
+                    </button>
+                </div>
+            }
+        </h2>
+    </div>
+  </div>
+</a>

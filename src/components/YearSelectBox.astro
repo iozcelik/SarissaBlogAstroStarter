@@ -1,0 +1,24 @@
+---
+import Config from "../sarissa.config.cjs";
+
+const {currentYear} = Astro.props;
+
+const allPosts = await Astro.glob("../pages/post/*.md");
+let allYears = allPosts
+  .filter((f) => f.frontmatter.date != undefined)
+  .map((p) => new Date(p.frontmatter.date).getFullYear().toString());
+let allYearsUnique = [...new Set(allYears.flat())];
+
+---
+    
+<select class="select select-bordered" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+    {currentYear?.toString()=="" 
+        ? <option disabled selected>{Config.i18n.archive.select}</option>
+        : <option disabled>{Config.i18n.archive.select}</option>}
+    {allYearsUnique.map((year) =>
+        currentYear?.toString() == year 
+            ? <option selected>{year}</option>
+            : <option value={`/archive/${year}/1`}>{year}</option>
+        
+    )}
+</select>

@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const { pageTitle } = Astro.props;
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-3xl font-extrabold">{pageTitle}</h1>
+    </div>
+  </div>
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <slot />
+    </div>
+  </div>
+  <slot name="paging"/>
+</BaseLayout>

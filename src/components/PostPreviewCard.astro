@@ -1,0 +1,27 @@
+---
+import {formatDate,getCategoryColour} from "../sarissaUtils";
+
+const { post } = Astro.props;
+---
+
+<div class="card card-side bg-base-200 shadow-xl">
+  {post.frontmatter.image &&
+  <figure>
+    <img  class="w-52 h-68" src={post.frontmatter.image} />
+  </figure>}
+  <div class="card-body">
+    <a href={post.url}><h2 class="card-title">{post.frontmatter.title}</h2></a>
+    <div class="justify-start space-x-2">
+        {post.frontmatter.categories.map((category) =><a href={`../category/${category}/1`} class={`btn btn-xs ${getCategoryColour(category)}`}>{category}</a>)}
+    </div>
+    <p>
+     {post.frontmatter.description}
+    </p>
+    <div class="card-actions justify-end">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+</svg>
+      {formatDate(post.frontmatter.date)}
+    </div>
+  </div>
+</div>

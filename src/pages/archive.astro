@@ -1,0 +1,9 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import YearSelectBox from "../components/YearSelectBox.astro";
+import Config from "../sarissa.config.cjs";
+---
+
+<PageLayout pageTitle={Config.menu?.archive ?? "Archive"}>
+  <YearSelectBox currentYear="" />
+</PageLayout>

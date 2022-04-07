@@ -1,0 +1,29 @@
+---
+const { currentPage, totalPage, url } = Astro.props;
+
+let pageStatuses =Array.from({ length: totalPage }, (v, i) => i + 1).map(i=>{
+  var item ={
+	pageNumber : i,
+  isActive : currentPage ==i,
+  isDisabled : isDisabled(i)};
+  return item;
+});
+
+function isDisabled(i){
+  if(totalPage<=6) return false;
+  if(i<=2 || i>= totalPage-1) return false;
+  if(currentPage==i-1||currentPage==i||currentPage==i+1)return false;
+  return true;
+}
+---
+
+<div class="flex justify-center">
+  <div class="btn-group">
+{pageStatuses.map((pageStatus,index)=> pageStatus.isActive 
+  ? <a class="btn btn-active">{currentPage}</a> 
+    : (pageStatus.isDisabled && !pageStatuses[index-1].isDisabled 
+        ? <button class="btn btn-disabled">...</button> 
+            : (!pageStatus.isDisabled &&
+                <a class="btn" href={`/${url}/${pageStatus.pageNumber}`}>{pageStatus.pageNumber}</a> )))}
+  </div>
+</div>

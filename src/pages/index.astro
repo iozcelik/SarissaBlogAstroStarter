@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostPreview from '../components/PostPreviewCard.astro';
+import Pagination from '../components/Pagination.astro';
+import Config from "../sarissa.config.cjs";
+
+const allPosts = await Astro.glob('./post/*.md');
+const sortedPosts = allPosts.sort((a, b) => new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf());
+const totalPage = Math.max(1, Math.ceil(allPosts.length / Config.pageSize));
+---
+
+<BaseLayout pageTitle="Home">
+    {sortedPosts.slice(0, Config.pageSize).map((post) => (  <PostPreview post={post} />))}
+    <Pagination currentPage=1 totalPage={totalPage} url="posts" /> 
+</BaseLayout>

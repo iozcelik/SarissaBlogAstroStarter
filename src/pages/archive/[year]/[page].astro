@@ -1,0 +1,46 @@
+---
+import PageLayout from "../../../layouts/PageLayout.astro";
+import PostPreview from "../../../components/PostPreviewRow.astro";
+import Pagination from "../../../components/Pagination.astro";
+import YearSelectBox from "../../../components/YearSelectBox.astro";
+import Config from "../../../sarissa.config.cjs";
+
+export async function getStaticPaths({paginate}) {
+  const allPosts = await Astro.glob("../../post/*.md");
+  let allYears = allPosts
+    .filter((f) => f.frontmatter.date != undefined)
+    .map((p) => new Date(p.frontmatter.date).getFullYear().toString());
+  let allYearsUnique = [...new Set(allYears.flat())];
+
+  return allYearsUnique.map((year) => {
+    const filteredPosts = allPosts.filter((post) =>
+      new Date(post.frontmatter.date).getFullYear().toString()===year
+    );
+    return paginate(filteredPosts, {
+      params: { year },
+      pageSize: Config.pageSize
+    });
+  });
+}
+
+const { page } = Astro.props;
+const { params } = Astro;
+let url = "archive/"+params.year;
+---
+
+<PageLayout pageTitle={Config.menu?.archive ?? "Archive"}>
+  <YearSelectBox currentYear={params.year} />
+  <p class="text-right">{page.total} {Config.i18n.resultFound}</p>
+  <div class="overflow-x-auto w-full">
+    <table class="table-normal w-full">
+      <tbody>
+        {page.data.map((post) => (  <PostPreview post={post} />))}
+      </tbody>
+    </table>
+  </div>
+  <Pagination slot="paging" 
+    currentPage={page.currentPage}
+    totalPage={page.lastPage}
+    url={url}
+  />
+</PageLayout>

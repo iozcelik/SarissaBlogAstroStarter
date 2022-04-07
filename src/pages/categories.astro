@@ -1,0 +1,62 @@
+---
+import Config from "../sarissa.config.cjs";
+import PageLayout from "../layouts/PageLayout.astro";
+import CategoryButton from "../components/CategoryButton.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+
+const categorySettings = Config.categorySettings;
+const customizedCategories = Config.categories ?? [];
+
+const allPosts = await Astro.glob("./post/*.md");
+let allCategories = allPosts
+  .filter((f) => f.frontmatter.categories != undefined)
+  .map((p) => p.frontmatter.categories)
+  .reduce((a, b) => {
+    return a.concat(b);
+  }, []);
+
+const uniqueCategories = Object.entries(
+  allCategories.reduce((a, b) => {
+    a[b] = (a[b] || 0) + 1;
+    return a;
+  }, {})
+).map(([k, v]) => ({ name: k, count: v }));
+
+const categories = uniqueCategories.map((category) => {
+  var customizedCategory = customizedCategories.find(
+    (a) => a.name === category.name
+  );
+  var item = {
+    name: category.name,
+    count: category.count,
+    color: customizedCategory?.color,
+    image: customizedCategory?.image,
+    order: customizedCategory?.order,
+  };
+  return item;
+});
+
+let sortedCategories =
+  categorySettings.order === "count"
+    ? categories.sort((a, b) => {
+        if (a.order == undefined) return -1;
+        if (b.order == undefined) return -1;
+        if (a.order < b.order) return 1;
+        return b.count - a.count;
+      })
+    : categories.sort((a, b) => {
+        if (a.order == undefined) return -1;
+        if (b.order == undefined) return -1;
+        if (a.order < b.order) return 1;
+        return a.name.localeCompare(b.name);
+      });
+---
+<PageLayout pageTitle={Config.menu?.categories ?? "Categories"}>
+    <div class="flex flex-wrap justify-center gap-8">
+        {categorySettings.layout === "button" ?
+            sortedCategories.map((category)=> (<CategoryButton category={category}/>)) 
+            :
+            sortedCategories.map((category)=> (<CategoryCard category={category}/>)) 
+        }
+    </div>
+</PageLayout>

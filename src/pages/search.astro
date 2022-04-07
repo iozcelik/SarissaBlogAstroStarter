@@ -1,0 +1,113 @@
+---
+import Config from "../sarissa.config.cjs";
+import PageLayout from "../layouts/PageLayout.astro";
+---
+
+<PageLayout pageTitle={Config.menu?.search ?? "Search"}>
+  <div class="form-control">
+    <div class="input-group">
+      <input
+        type="text"
+        placeholder={Config.i18n.search.placeholder}
+        class="input input-bordered w-full"
+        id="textSearch"
+        onclick="search()"
+      />
+      <button
+        class="btn btn-square btn-error"
+        style="margin-left: 10px;"
+        onclick="clearSearch()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+      </button>
+      <button class="btn btn-primary btn-square">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <p class="text-right" id="itemFoundText"></p>
+  <div class="overflow-x-auto w-full">
+    <table class="table-normal w-full">
+      <tbody id="results"></tbody>
+    </table>
+  </div>
+</PageLayout>
+
+<script hoist type="module">
+  import Fuse from "fuse.js";
+  import Config from "../sarissa.config.cjs";
+  import { formatDate } from "../sarissaUtils";
+
+  var response = await fetch("searchindex.json");
+  const data = await response.json();
+
+  const textInputDelay = (fn, ms) => {
+    let timer = 0;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(fn.bind(this, ...args), ms || 0);
+    };
+  };
+
+  const search = async () => {
+    let text = document.getElementById("textSearch").value;
+    console.log(data);
+    const fuse = new Fuse(data, Config.searchOptions);
+    const res = fuse.search(text);
+    var html = "";
+    if (res.length) {
+      document.getElementById(
+        "itemFoundText"
+      ).innerHTML = `${res.length} ${Config.i18n.resultFound}`;
+      for (let i = 0; i < res.length; i++) {
+        html += `<tr><td><div class="flex items-center space-x-3">`;
+        if (res[i].item.image) {
+          html += `<div class="avatar"><div class="mask mask-squircle w-12 h-12"><img src=${res[i].item.image} /></div></div>`;
+        }
+        html += `<a href=${res[i].item.slug}><div class="w-full"><div class="font-bold">${res[i].item.title}</div></a>`;
+        if (res[i].item.description) {
+          html += `<div class="text-sm opacity-50">${res[i].item.description}</div>`;
+        }
+        if (res[i].item.date) {
+          html += `<div class="card-actions justify-end">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>${formatDate(res[i].item.date)}</div>`;
+        }
+        html += `</div></div></td></tr>`;
+      }
+      document.getElementById("results").innerHTML = html;
+    } else {
+      document.getElementById("results").innerHTML =
+        "<h4> <b>No result found </b></h4>";
+    }
+  };
+
+  document.getElementById("textSearch").onkeyup = textInputDelay(search, 300);
+</script>
