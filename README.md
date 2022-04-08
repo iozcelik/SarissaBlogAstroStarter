@@ -104,7 +104,7 @@ Sarissa Blog theme created to serve markdown-based personel blog needs.
 ```
 
 ## Built with Sarrisa Blog
-
+- [İsmail Özçelik](https://ismailozcelik.com/) - My personal blog site
 Open an issue to listed here.
 
 ## Support
