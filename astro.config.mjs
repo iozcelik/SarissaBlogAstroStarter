@@ -4,7 +4,10 @@ import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   markdown: {
-    drafts: true,
+    shikiConfig: {
+      theme: 'nord',
+      wrap: true,
+    },
   },
   integrations: [tailwind(), sitemap()],
 });
