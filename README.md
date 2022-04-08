@@ -115,4 +115,4 @@ If this template helped you, buy me a coffee.
 
 ## License
 
-This template is MIT licensed.
+This template is MIT licensed. 
