@@ -8,7 +8,7 @@ import Config from "../../../sarissa.config.cjs";
 export async function getStaticPaths({paginate}) {
   const allPosts = await Astro.glob("../../post/*.md");
   let allYears = allPosts
-    .filter((f) => f.frontmatter.date != undefined)
+    .filter((f) => f.frontmatter.date != undefined && f.frontmatter.draft != true)
     .map((p) => new Date(p.frontmatter.date).getFullYear().toString());
   let allYearsUnique = [...new Set(allYears.flat())];
 

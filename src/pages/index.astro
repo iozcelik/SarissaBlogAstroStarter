@@ -5,7 +5,7 @@ import Pagination from '../components/Pagination.astro';
 import Config from "../sarissa.config.cjs";
 
 const allPosts = await Astro.glob('./post/*.md');
-const sortedPosts = allPosts.sort((a, b) => new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf());
+const sortedPosts = allPosts.filter(f=> f.frontmatter.draft != true).sort((a, b) => new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf());
 const totalPage = Math.max(1, Math.ceil(allPosts.length / Config.pageSize));
 ---
 

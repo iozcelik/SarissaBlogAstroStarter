@@ -11,7 +11,6 @@ import PageLayout from "../layouts/PageLayout.astro";
         placeholder={Config.i18n.search.placeholder}
         class="input input-bordered w-full"
         id="textSearch"
-        onclick="search()"
       />
       <button
         class="btn btn-square btn-error"
@@ -33,7 +32,7 @@ import PageLayout from "../layouts/PageLayout.astro";
           ></path>
         </svg>
       </button>
-      <button class="btn btn-primary btn-square">
+      <button class="btn btn-primary btn-square" onclick="search()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -104,6 +103,7 @@ import PageLayout from "../layouts/PageLayout.astro";
       }
       document.getElementById("results").innerHTML = html;
     } else {
+      document.getElementById("itemFoundText").innerHTML = "";
       document.getElementById("results").innerHTML =
         "<h4> <b>No result found </b></h4>";
     }

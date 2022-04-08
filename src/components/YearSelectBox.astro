@@ -5,7 +5,7 @@ const {currentYear} = Astro.props;
 
 const allPosts = await Astro.glob("../pages/post/*.md");
 let allYears = allPosts
-  .filter((f) => f.frontmatter.date != undefined)
+  .filter((f) => f.frontmatter.date != undefined && f.frontmatter.draft != true)
   .map((p) => new Date(p.frontmatter.date).getFullYear().toString());
 let allYearsUnique = [...new Set(allYears.flat())];
 

@@ -9,7 +9,7 @@ const customizedCategories = Config.categories ?? [];
 
 const allPosts = await Astro.glob("./post/*.md");
 let allCategories = allPosts
-  .filter((f) => f.frontmatter.categories != undefined)
+  .filter((f) => f.frontmatter.categories != undefined && f.frontmatter.draft != true)
   .map((p) => p.frontmatter.categories)
   .reduce((a, b) => {
     return a.concat(b);
