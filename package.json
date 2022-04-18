@@ -19,6 +19,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^0.1.0",
     "@astrojs/tailwind": "^0.1.0",
+    "@sarissa/pagination": "^1.0.2",
     "daisyui": "^2.13.6",
     "fuse.js": "^6.5.3",
     "luxon": "^2.3.1",
