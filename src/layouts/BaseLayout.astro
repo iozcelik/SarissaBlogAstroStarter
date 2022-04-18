@@ -17,7 +17,7 @@ const { pageTitle } = Astro.props;
     <div class="drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex justify-center lg:justify-start">
-        <div class="w-[70vw] max-w-screen-lg lg:pt-14 lg:p-4">
+        <div class="sm:w-[70vw] max-w-screen-lg lg:pt-14 lg:p-4">
           <MobileNavbar />
           <div class="flex-1 p-3 md:py-[35]">
             <div class="space-y-2 md:space-y-6">
@@ -29,7 +29,7 @@ const { pageTitle } = Astro.props;
       </div>
       <div class="drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <div class="overflow-y-auto flex lg:justify-end w-[30vw]">
+        <div class="overflow-y-auto flex lg:justify-end w-fit sm:w-[30vw]">
           <div class="w-fit p-3 lg:m-6 bg-base-100">
             {Config.siteImagePath && <SiteImage />}
             <h1 class="text-2xl p-2 pl-4"><a href="/">{Config.siteTitle}</a></h1>
